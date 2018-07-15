@@ -55,7 +55,7 @@ type Client struct {
 // NewClient returns a client using the provided CookieJar that is capable
 // of saving cookies and performing requests that automaticall solve
 // cloudflare challenges.
-func NewClient(jar *http.CookieJar) *Client {
+func NewClient(jar http.CookieJar) *Client {
 	if jar == nil {
 		var err error
 		if jar, err = cookiejar.New(nil); err != nil {
