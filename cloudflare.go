@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -31,6 +32,7 @@ var uas = []string{
 
 var rng = rand.New(rand.NewSource(int64(time.Now().Nanosecond())))
 var rua = uas[rng.Perm(len(uas))[0]]
+var Log = log.New(os.Stderr, "go-cloudflare-scraper: ", log.LstdFlags)
 
 // randomAgent returns a random user agent from those above
 func randomAgent() string {
@@ -50,23 +52,20 @@ type Client struct {
 	ua string
 }
 
-// NewClient returns a new cloudflare client.
-func NewClient() *Client {
-	jar, err := cookiejar.New(nil)
-	if err != nil {
-		panic(err)
-	}
-	return NewClientJar(jar)
-}
-
 // NewClient returns a client using the provided CookieJar that is capable
 // of saving cookies and performing requests that automaticall solve
 // cloudflare challenges.
-func NewClientJar(jar http.CookieJar) *Client {
+func NewClient(jar *http.CookieJar) *Client {
+	if jar == nil {
+		var err error
+		if jar, err = cookiejar.New(nil); err != nil {
+			panic(err)
+		}
+	}
 	return &Client{
 		Client: &http.Client{
 			CheckRedirect: keepUserAgent,
-			Jar:           jar,
+			Jar:           *jar,
 		},
 		ua: randomAgent(),
 	}
@@ -124,9 +123,9 @@ var jschlRegexp = regexp.MustCompile(`name="jschl_vc" value="(\w+)"`)
 var passRegexp = regexp.MustCompile(`name="pass" value="(.+?)"`)
 
 func printHeaders(resp *http.Response) {
-	log.Println("Headers:")
+	Log.Println("Headers:")
 	for key, vals := range resp.Header {
-		log.Printf("%s: %+v", key, vals)
+		Log.Printf("%s: %+v", key, vals)
 	}
 }
 
