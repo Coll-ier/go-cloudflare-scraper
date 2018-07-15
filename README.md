@@ -10,27 +10,22 @@ Usage
 package main
 
 import (
-    "github.com/cardigann/go-cloudflare-scraper"
+    "github.com/abc1236762/go-cloudflare-scraper"
 )
 
-
 func main() {
-	scraper, err := scraper.NewTransport(http.DefaultTransport)
-	if err != nil {
+	var err error
+	
+	var client = scraper.NewClient()
+	if res, err = client.Get("<URL here>"); err != nil {
 		log.Fatal(err)
 	}
-
-	c := http.Client{Transport: scraper}
-
-	res, err := c.Get(ts.URL)
-	if err != nil {
+	
+	var body []byte
+	if body, err = ioutil.ReadAll(res.Body); err != nil {
 		log.Fatal(err)
 	}
-
-	body, err = ioutil.ReadAll(res.Body)
-	res.Body.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+	defer res.Body.Close()
+	
 }
-
+```
