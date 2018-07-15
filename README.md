@@ -16,7 +16,7 @@ import (
 func main() {
 	var err error
 	
-	var client = scraper.NewClient()
+	var client = scraper.NewClient(nil)
 	if res, err = client.Get("<URL here>"); err != nil {
 		log.Fatal(err)
 	}
