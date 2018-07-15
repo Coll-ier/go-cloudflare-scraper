@@ -175,9 +175,9 @@ func (c *Client) solveChallenge(resp *http.Response) (*http.Response, error) {
 	req.Header.Set("User-Agent", c.ua)
 	req.Header.Set("Referer", resp.Request.URL.String())
 
-	log.Printf("Requesting %s?%s", u.String(), params.Encode())
-	log.Printf("Headers: %+v", req.Header)
-	log.Printf("Cookies: %+v", c.Jar.Cookies(u))
+	Log.Printf("Requesting %s?%s", u.String(), params.Encode())
+	Log.Printf("Headers: %+v", req.Header)
+	Log.Printf("Cookies: %+v", c.Jar.Cookies(u))
 	return c.Do(req)
 }
 
