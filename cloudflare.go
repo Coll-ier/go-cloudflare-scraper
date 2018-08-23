@@ -82,7 +82,7 @@ func (c *Client) Do(r *http.Request) (*http.Response, error) {
 	if err != nil {
 		return resp, err
 	}
-	printHeaders(resp)
+
 	if isCloudflareCheck(resp) {
 		return c.solveChallenge(resp)
 	}
