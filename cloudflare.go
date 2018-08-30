@@ -66,6 +66,7 @@ func NewClient(jar http.CookieJar) *Client {
 		Client: &http.Client{
 			CheckRedirect: keepUserAgent,
 			Jar:           jar,
+			Timeout:       time.Duration*30
 		},
 		ua: randomAgent(),
 	}
